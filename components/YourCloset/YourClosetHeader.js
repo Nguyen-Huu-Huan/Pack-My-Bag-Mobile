@@ -11,11 +11,28 @@ import { Header, BottomSheet, ListItem, Button } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const YourClosetHeader = ({ item_data_list }) => {
-  console.log("the data list contains: ", item_data_list);
   const [isVisible, setIsVisible] = useState(false);
   const confirmConnection = () => {
     setIsVisible(false);
   };
+  item_data_list = item_data_list.filter((item) => item.slot !== null);
+  item_data_list = item_data_list.sort((firstitem, seconditem) => {
+    return firstitem.slot - seconditem.slot;
+  });
+  const data_filtered = [];
+  for (let i = 1; i < 9; i++) {
+    var error = 0;
+    item_data_list.map((item) => {
+      if (item.slot === i) {
+        data_filtered.push(item);
+        error += 1;
+      }
+    });
+    if (error === 0) {
+      data_filtered.push(null);
+    }
+  }
+  console.log(data_filtered.length);
   return (
     <Header
       centerComponent={{
@@ -48,9 +65,9 @@ const YourClosetHeader = ({ item_data_list }) => {
             isVisible={isVisible}
             containerStyle={{ backgroundColor: "white" }}
           >
-            {item_data_list.map((item_data, item_index) => (
+            {/* {item_data_list.map((item_data) => (
               <ListItem
-                key={item_index}
+                key={item_data.id}
                 containerStyle={{ backgroundColor: "white " }}
               >
                 <Image
@@ -63,7 +80,28 @@ const YourClosetHeader = ({ item_data_list }) => {
                   </ListItem.Title>
                 </ListItem.Content>
               </ListItem>
-            ))}
+            ))} */}
+
+            {data_filtered.map((item, index) => {
+              return (
+                <View key={index}>
+                  <Text style={{ marginStart: 20, fontSize: 18 }}>
+                    This is slot {`${index + 1}`}
+                  </Text>
+                  <ListItem containerStyle={{ backgroundColor: "white " }}>
+                    <Image
+                      style={styles.image}
+                      source={require("../../assets/Images/favicon.png")}
+                    />
+                    <ListItem.Content>
+                      <ListItem.Title style={{ color: "black" }}>
+                        {item ? item.name : "This item has not been set up yet"}
+                      </ListItem.Title>
+                    </ListItem.Content>
+                  </ListItem>
+                </View>
+              );
+            })}
             <Button
               title="Confirm"
               buttonStyle={{ backgroundColor: "green" }}

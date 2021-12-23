@@ -18,6 +18,7 @@ const ItemDetails = ({ route, navigation }) => {
   const [positionIndex, setPositionIndex] = useState(null);
   const [weatherIndex, setWeatherIndex] = useState(null);
   const [value, setValue] = useState(null);
+  const [name, setName] = useState(null);
   const [itemIcon, setItemIcon] = useState("");
   const { item_data } = route.params;
   console.log("the item icon is: ", itemIcon);
@@ -133,6 +134,12 @@ const ItemDetails = ({ route, navigation }) => {
       }
     }
   };
+  const handleSubmitItem = () => {
+    console.log("Name of the item :", name);
+    console.log("Position you want to put in closet :", positionIndex);
+    console.log("The id of the place :", value);
+    console.log("The type of weather :", weatherIndex);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -149,6 +156,7 @@ const ItemDetails = ({ route, navigation }) => {
               <TextInput
                 style={styles.itemDetailsHeaderTextInput}
                 placeholder="Search"
+                onChangeText={(text) => setName(text)}
               />
               <Text style={styles.itemDetailsBodyRowText}>
                 {item_data.name}
@@ -271,6 +279,21 @@ const ItemDetails = ({ route, navigation }) => {
                 renderItem={renderWeather}
               />
             </View>
+          </View>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={handleSubmitItem}
+              style={{
+                width: 40,
+                height: 40,
+
+                color: "#222160",
+              }}
+            >
+              <Text>
+                <Entypo size={40} name="add-to-list" color="white" />
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
