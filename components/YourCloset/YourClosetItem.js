@@ -2,8 +2,8 @@ import React from "react";
 import { View, Text, TouchableOpacity, Avatar, ScrollView, StyleSheet, Image } from "react-native";
 import { Icon } from "react-native-elements/dist/icons/Icon";
 import { ListItem, Button } from "react-native-elements";
-const YourClosetBody = ({ navigation, item_data, remove_item }) => {
-	var image_source = "../../assets/Images/" + item_data.icon;
+const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
+	var image_source = item_data.icon;
 	return (
 		<View style={{ marginBottom: 10, background: "blue" }}>
 			<ListItem.Swipeable
@@ -14,7 +14,7 @@ const YourClosetBody = ({ navigation, item_data, remove_item }) => {
 						icon={{ name: "delete", color: "white" }}
 						buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
 						onPress={() => {
-							remove_item(item_data.id);
+							remove_item(item_index);
 						}}
 					/>
 				}
@@ -27,7 +27,7 @@ const YourClosetBody = ({ navigation, item_data, remove_item }) => {
 		</View>
 	);
 };
-export default YourClosetBody;
+export default YourClosetItem;
 const styles = StyleSheet.create({
 	image: {
 		width: 50,

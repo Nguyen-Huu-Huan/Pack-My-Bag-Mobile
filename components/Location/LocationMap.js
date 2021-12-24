@@ -55,7 +55,7 @@ const LocationMap = ({ location_list }) => {
 					bottom: height * 0.05,
 					zIndex: 90,
 				}}
-				source={{ uri: item.placeIcon }}
+				source={{ uri: item.place_icon }}
 			/>
 		);
 	};
