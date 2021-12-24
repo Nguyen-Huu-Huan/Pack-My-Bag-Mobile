@@ -3,17 +3,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import ClosetController from "./Controllers/ClosetController";
 import LocationController from "./Controllers/LocationController";
 import { useEffect, useState } from "react";
+import useFindAllLocations from "./Hooks/useFindAllLocations";
+import { LocationContext } from "./Contexts/LocationContext";
 export default function App() {
-	const [locationData, setLocationData] = useState([]);
 	useEffect(() => {
 		LocationController.getAllLocations().then((data) => {
 			setLocationData(data);
 			console.log(data);
 		});
 	}, []);
+	const { locations, isLoadingLocations } = useFindAllLocations();
 	return (
-		<NavigationContainer>
-			<AppNavigator />
-		</NavigationContainer>
+		<LocationContext.Provider value={{ locations, isLoadingLocations }}>
+			<NavigationContainer>{!isLoadingLocations ? <AppNavigator /> : <></>}</NavigationContainer>
+		</LocationContext.Provider>
 	);
 }
