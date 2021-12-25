@@ -17,7 +17,9 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LocationContext } from "../../Contexts/LocationContext";
 import * as ImagePicker from "expo-image-picker";
+import Popover from "react-native-popover-view";
 import { ListItem } from "react-native-elements";
+import ClosetController from "../../Controllers/ClosetController";
 const ItemDetails = ({ route, navigation }) => {
   const { locations } = useContext(LocationContext);
   const [positionIndex, setPositionIndex] = useState(null);
@@ -26,10 +28,22 @@ const ItemDetails = ({ route, navigation }) => {
   const [name, setName] = useState(null);
   const [itemIcon, setItemIcon] = useState("");
   const [positionList, setPositionList] = useState([]);
+  const [showPopover, setShowPopover] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [weatherList, setWeatherList] = useState([]);
 
   const { item_data } = route.params;
 
+  if (item_data.length > 0 && name === null) {
+    item_data.map((item) => {
+      setPositionIndex(item.closet_position_index);
+      setPositionList(item.item_location);
+      setName(item.name);
+      console.log("This is item name", item.name);
+
+      setWeatherList(item.weather_type);
+    });
+  }
   const renderItem = (item) => {
     return (
       <View style={styles.item}>
@@ -164,9 +178,26 @@ const ItemDetails = ({ route, navigation }) => {
   };
   const handleSubmitItem = () => {
     console.log("Name of the item :", name);
-    console.log("Position you want to put in closet :", positionIndex);
-    console.log("The places you want to carry the item :", positionList);
-    console.log("The type of weather :", weatherList);
+    console.log("closet_position_index :", positionIndex);
+    console.log("item_location :", positionList);
+    console.log("icon: ", itemIcon);
+    console.log("weather_type :", weatherList);
+    if (name) {
+      setIsError(false);
+      item_data = {
+        name: name,
+        closet_position_index: positionIndex,
+        item_location: positionList,
+        icon: itemIcon,
+        weather_type: weatherList,
+      };
+      ClosetController.createItem(item_data)
+        ? navigation.push("Closet", { item_data: item_data })
+        : setIsError(true);
+    } else {
+      setIsError(true);
+    }
+    setShowPopover(true);
   };
   return (
     <ScrollView style={styles.scrollView}>
@@ -184,6 +215,7 @@ const ItemDetails = ({ route, navigation }) => {
               <Text style={styles.itemDetailsBodyRowText}>Item Name</Text>
               <TextInput
                 style={styles.itemDetailsHeaderTextInput}
+                defaultValue={name}
                 placeholder="Search"
                 onChangeText={(text) => setName(text)}
               />
@@ -355,7 +387,18 @@ const ItemDetails = ({ route, navigation }) => {
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   iconStyle={styles.iconStyle}
-                  data={["Sunny", "Cloudy", "Rainy", "Smoggy", "Windy"]}
+                  data={[
+                    "Cloud/Sunny",
+                    "Clear Sky",
+                    "Rainy",
+                    "Drizzle",
+                    "Ashy/Dusty",
+                    "Windy",
+                    "Tornado",
+                    "Misty/Foggy",
+                    "Thunderstorm",
+                    "Snow",
+                  ]}
                   maxHeight={300}
                   placeholder={
                     weatherIndex
@@ -461,6 +504,57 @@ const ItemDetails = ({ route, navigation }) => {
                 <Entypo size={40} name="add-to-list" color="white" />
               </Text>
             </TouchableOpacity>
+            <Popover
+              isVisible={showPopover}
+              onRequestClose={() => setShowPopover(false)}
+            >
+              <View
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingHorizontal: 100,
+                  paddingVertical: 30,
+                }}
+              >
+                {isError ? (
+                  <MaterialIcons color="#ffae42" name="error" size={80} />
+                ) : (
+                  <AntDesign name="checkcircle" size={80} color="#90EE90" />
+                )}
+
+                <Text
+                  style={{
+                    fontSize: 30,
+                    marginVertical: 10,
+                    fontFamily: "font1",
+                  }}
+                >
+                  {isError ? "Error!" : "Confirm!"}
+                </Text>
+                <Text style={{ fontSize: 16, color: "#989898" }}>
+                  {isError
+                    ? "Name is required"
+                    : "Your customize item has been added/updated"}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    marginTop: 30,
+                    borderRadius: 5,
+                    backgroundColor: "#ace5ee",
+                    width: 100,
+                    height: 50,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onPress={() => setShowPopover(false)}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </Popover>
           </View>
         </View>
       </View>
