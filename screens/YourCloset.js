@@ -3,16 +3,16 @@ import { SafeAreaView } from "react-native";
 import YourClosetHeader from "../components/YourCloset/YourClosetHeader";
 import YourClosetBody from "../components/YourCloset/YourClosetBody";
 import ClosetController from "../Controllers/ClosetController";
-export default function YourCloset({ navigation }) {
+export default function YourCloset({ navigation, route }) {
 	const [closetData, setClosetData] = useState([]);
-	const [isDataLoading, setDataLoading] = useState(false);
+	const [isDataLoading, setDataLoading] = useState(true);
+	const reLoadData = route.params ? route.params.reLoadData : false;
 	useEffect(async () => {
-		setDataLoading(true);
 		const closet_data = await ClosetController.getAllItems();
 		console.log("the closet data is: ", closet_data);
 		setClosetData(closet_data);
 		setDataLoading(false);
-	}, []);
+	}, [reLoadData, navigation]);
 	const item_data_list = [
 		{
 			id: 1,
