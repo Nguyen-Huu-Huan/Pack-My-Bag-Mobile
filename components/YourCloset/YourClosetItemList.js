@@ -70,6 +70,7 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
           </TouchableOpacity>
         </View>
       </View>
+
       {itemDataList.map((item_data, index) => {
         return (
           <YourClosetItem
