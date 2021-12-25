@@ -4,18 +4,17 @@ import ClosetController from "./Controllers/ClosetController";
 import LocationController from "./Controllers/LocationController";
 import { useEffect, useState } from "react";
 import useFindAllLocations from "./Hooks/useFindAllLocations";
+import useFindAllClosetItems from "./Hooks/useFindAllClosetItems";
 import { LocationContext } from "./Contexts/LocationContext";
+import { ClosetContext } from "./Contexts/ClosetContext";
 export default function App() {
-	useEffect(() => {
-		LocationController.getAllLocations().then((data) => {
-			setLocationData(data);
-			console.log(data);
-		});
-	}, []);
 	const { locations, isLoadingLocations } = useFindAllLocations();
+	const { closetItems, isLoadingCloset } = useFindAllClosetItems();
 	return (
-		<LocationContext.Provider value={{ locations, isLoadingLocations }}>
-			<NavigationContainer>{!isLoadingLocations ? <AppNavigator /> : <></>}</NavigationContainer>
-		</LocationContext.Provider>
+		<ClosetContext.Provider value={{ closetItems, isLoadingCloset }}>
+			<LocationContext.Provider value={{ locations, isLoadingLocations }}>
+				<NavigationContainer>{!isLoadingLocations && !isLoadingCloset ? <AppNavigator /> : <></>}</NavigationContainer>
+			</LocationContext.Provider>
+		</ClosetContext.Provider>
 	);
 }

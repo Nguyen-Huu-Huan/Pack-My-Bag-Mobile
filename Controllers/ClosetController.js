@@ -45,7 +45,31 @@ const ClosetController = {
 			});
 	},
 	removeItem: (item_index) => {
-		return database.ref("Closet").child(item_index).remove();
+		//imagine the closet is an array, splice the item at value item_index
+		database.ref("Closet").once("value", function (snapshot) {
+			const closet_data = snapshot.val();
+			closet_data.splice(item_index, 1);
+			database.ref("Closet").set(closet_data);
+		});
+		return database
+			.ref("Closet")
+			.once("value")
+			.then(function (snapshot) {
+				return snapshot.val();
+			});
+
+		// database
+		// 	.ref("Closet")
+		// 	.child(item_index)
+		// 	.remove()
+		// 	.then(function () {
+		// 		return database
+		// 			.ref("Closet")
+		// 			.once("value")
+		// 			.then(function (snapshot) {
+		// 				return snapshot.val();
+		// 			});
+		// 	});
 	},
 	updateItem: (item_index, new_item_data) => {
 		return storage
