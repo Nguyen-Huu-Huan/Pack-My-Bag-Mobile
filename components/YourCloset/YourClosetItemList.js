@@ -19,22 +19,23 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
   const [itemSearchInput, setItemSearchInput] = useState("");
   const [itemDataList, setItemDataList] = useState(item_data_list);
   const [isLoadingRemoveData, setLoadingRemoveData] = useState(false);
+  const [currentData, setCurrentData] = useState([]);
   const [allAvailablePositions, setAllAvailablePositions] = useState([
     1, 2, 3, 4, 5, 6, 7, 8,
   ]);
+  if (navigation.state) {
+    const { newItem } = navigation.state.params.newItem;
+    console.log("this is newItem", newItem);
+  }
   const removeItem = useCallback(async (item_id) => {
-    console.log("be carefullllllllllllllllllllllll", item_id);
     setLoadingRemoveData(true);
     Promise.resolve(ClosetController.removeItem(item_id)).then(() => {
       setLoadingRemoveData(false);
       setItemDataList(
         itemDataList.filter((item, index, rep) => index !== item_id)
       );
-      console.log("this is running");
-      console.log(itemDataList);
     });
   });
-
   const updateSearch = (searchInput) => {
     setItemSearchInput(searchInput);
   };
@@ -65,7 +66,13 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
       }
     }
   }, [itemSearchInput]);
-
+  if (currentData !== item_data_list) {
+    setCurrentData(item_data_list);
+  }
+  useEffect(() => {
+    const willFocusSubscription = navigation.addListener("focus", () => {});
+    return willFocusSubscription;
+  }, []);
   return (
     <View style={styles.wrapper}>
       {isLoadingRemoveData ? (
@@ -92,7 +99,7 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
         >
           <TouchableOpacity
             onPress={() =>
-              navigation.push("ItemInfo", {
+              navigation.navigate("ItemInfo", {
                 item_data: [],
                 available_closet_index: allAvailablePositions,
               })
@@ -111,7 +118,7 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
       </View>
       {itemDataList.length > 0 && (
         <ScrollView>
-          {itemDataList.map((item_data, index) => {
+          {currentData.map((item_data, index) => {
             return (
               <YourClosetItem
                 key={index}

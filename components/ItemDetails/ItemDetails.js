@@ -20,6 +20,7 @@ import * as ImagePicker from "expo-image-picker";
 import Popover from "react-native-popover-view";
 import { ActivityIndicator } from "react-native";
 import ClosetController from "../../Controllers/ClosetController";
+import { StackActions, NavigationActions } from "react-navigation";
 const ItemDetails = ({ route, navigation }) => {
   const { locations } = useContext(LocationContext);
   const [positionIndex, setPositionIndex] = useState(null);
@@ -32,6 +33,7 @@ const ItemDetails = ({ route, navigation }) => {
   const [isError, setIsError] = useState(false);
   const [weatherList, setWeatherList] = useState([]);
   const [isLoadingSubmitData, setIsLoadingSubmitData] = useState(false);
+  const [newItem, setNewItem] = useState([]);
   const { item_data, available_closet_index } = route.params;
   if (item_data.length > 0 && name === null) {
     item_data.map((item) => {
@@ -190,6 +192,7 @@ const ItemDetails = ({ route, navigation }) => {
       };
 
       var icon_uploaded = await ClosetController.createItem(newItem);
+      setNewItem(newItem);
       if (icon_uploaded) {
         setIsError(false);
       }
@@ -556,9 +559,13 @@ const ItemDetails = ({ route, navigation }) => {
                   }}
                   onPress={() => {
                     setShowPopover(false);
+
                     if (!isError) {
                       navigation.navigate("YourCloset", { reFetchData: true });
+                      // navigation.push("YourCloset");
                       // navigation.goBack();
+
+                      // navigation.navigate("YourCloset");
                     }
                   }}
                 >
