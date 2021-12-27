@@ -23,17 +23,28 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
   const [allAvailablePositions, setAllAvailablePositions] = useState([
     1, 2, 3, 4, 5, 6, 7, 8,
   ]);
+
   if (navigation.state) {
     const { newItem } = navigation.state.params.newItem;
-    console.log("this is newItem", newItem);
   }
+  useEffect(() => {
+    if (currentData !== item_data_list) {
+      setCurrentData(item_data_list);
+    }
+  }, [item_data_list]);
+  useEffect(() => {
+    if (currentData !== itemDataList) {
+      setCurrentData(itemDataList);
+    }
+  }, [itemDataList]);
   const removeItem = useCallback(async (item_id) => {
     setLoadingRemoveData(true);
     Promise.resolve(ClosetController.removeItem(item_id)).then(() => {
       setLoadingRemoveData(false);
       setItemDataList(
-        itemDataList.filter((item, index, rep) => index !== item_id)
+        currentData.filter((item, index, rep) => index !== item_id)
       );
+      console.log("this is item length after filter", itemDataList.length);
     });
   });
   const updateSearch = (searchInput) => {
@@ -66,13 +77,10 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
       }
     }
   }, [itemSearchInput]);
-  if (currentData !== item_data_list) {
-    setCurrentData(item_data_list);
-  }
-  useEffect(() => {
-    const willFocusSubscription = navigation.addListener("focus", () => {});
-    return willFocusSubscription;
-  }, []);
+
+  // console.log("This is item_data_list", item_data_list.length);
+  // console.log("This is itemDataList", itemDataList.length);
+  console.log(currentData.length);
   return (
     <View style={styles.wrapper}>
       {isLoadingRemoveData ? (
@@ -116,7 +124,7 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {itemDataList.length > 0 && (
+      {currentData.length > 0 && (
         <ScrollView>
           {currentData.map((item_data, index) => {
             return (

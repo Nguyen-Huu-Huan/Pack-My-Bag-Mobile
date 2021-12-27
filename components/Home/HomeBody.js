@@ -17,18 +17,19 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AwesomeButton from "react-native-really-awesome-button";
 import * as Location from "expo-location";
 import { Dropdown } from "react-native-element-dropdown";
+import ClosetController from "../../Controllers/ClosetController";
 
 // import { HomeStyles } from "./Home-stylesheet.js";
 const HomeBody = ({ navigation }) => {
   const [choice, setChoice] = useState(null);
   const { locations } = useContext(LocationContext);
-  const { closetItems } = useContext(ClosetContext);
+  var { closetItems } = useContext(ClosetContext);
   const openWeatherKey = `651f17426e3a852e30a3107b8f1dd555`;
   const url = "https://api.openweathermap.org/data/2.5/weather?";
   const [currentWeather, setCurrentWeather] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
-
+  const [closetData, setClosetData] = useState([]);
   const loadCurrentWeather = async () => {
     setRefreshing(true);
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -58,11 +59,22 @@ const HomeBody = ({ navigation }) => {
       loadCurrentWeather();
     }
   }, []);
-  //   console.log("This is current Items", closetItems);
-
+  useEffect(async () => {
+    Promise.resolve(ClosetController.getAllItems()).then((data) => {
+      if (data) {
+        setClosetData(data);
+      }
+    });
+  }, [choice]);
+  // console.log("This is closetItems Length", closetItems.length);
+  // console.log("This is closetData Length", closetData.length);
+  if (closetItems !== closetData) {
+    closetItems = [...closetData];
+  }
   const connectToArduino = async () => {
     itemDataResult = [];
     setIsSearchLoading(true);
+    console.log("This is when u click button", closetItems.length);
     await closetItems.forEach(async (item) => {
       try {
         if (item.item_location.includes(choice)) {
