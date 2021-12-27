@@ -76,7 +76,6 @@ const YourClosetHeader = ({ item_data_list }) => {
 
 						{data_filtered &&
 							data_filtered.map((item, index) => {
-								console.log("check for data: ", item);
 								return (
 									<View key={index}>
 										<Text style={{ marginStart: 20, fontSize: 18 }}>This is slot {`${index + 1}`}</Text>

@@ -20,6 +20,7 @@ const HomeBody = ({ navigation }) => {
 	const url = "https://api.openweathermap.org/data/2.5/weather?";
 	const [currentWeather, setCurrentWeather] = useState(null);
 	const [refreshing, setRefreshing] = useState(false);
+	const [isSearchLoading, setIsSearchLoading] = useState(false);
 	const loadCurrentWeather = async () => {
 		setRefreshing(true);
 		const { status } = await Location.requestForegroundPermissionsAsync();
@@ -50,6 +51,7 @@ const HomeBody = ({ navigation }) => {
 	}, []);
 	const connectToArduino = async () => {
 		itemDataResult = [];
+		setIsSearchLoading(true);
 		await closetItems.forEach(async (item) => {
 			try {
 				if (item.item_location.includes(choice)) {
@@ -121,6 +123,7 @@ const HomeBody = ({ navigation }) => {
 			}
 		});
 		console.log("the searching result is: ", itemDataResult);
+		setIsSearchLoading(false);
 		return itemDataResult;
 	};
 	const renderItem = (item) => {
@@ -192,7 +195,7 @@ const HomeBody = ({ navigation }) => {
 					renderLeftIcon={() => <FontAwesome5 style={{ marginEnd: 10 }} color="black" name="place-of-worship" size={20} />}
 					renderItem={renderItem}
 				/>
-				<AwesomeButton style={{ left: 250 }} progress backgroundColor="#FF8300" width={150} onPress={connectToArduino}>
+				<AwesomeButton style={{ left: 250 }} progress={isSearchLoading} backgroundColor="#FF8300" width={150} onPress={connectToArduino}>
 					<MaterialCommunityIcon name="access-point" size={30} color="#00aced" style={(styles.Icon, { marginEnd: 10 })} />
 					<Text style={{ color: "white", fontSize: 18 }}>Connect</Text>
 				</AwesomeButton>

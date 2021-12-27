@@ -25,7 +25,6 @@ const ItemDetails = ({ route, navigation }) => {
 	const [weatherList, setWeatherList] = useState([]);
 	const [isLoadingSubmitData, setIsLoadingSubmitData] = useState(false);
 	const { item_data, available_closet_index } = route.params;
-	console.log("the available closet index is: ", available_closet_index);
 	if (item_data.length > 0 && name === null) {
 		item_data.map((item) => {
 			setPositionIndex(item.closet_position_index);
@@ -147,12 +146,6 @@ const ItemDetails = ({ route, navigation }) => {
 	};
 	const handleSubmitItem = async () => {
 		setIsLoadingSubmitData(true);
-		console.log("Name of the item :", name);
-		console.log("closet_position_index :", positionIndex);
-		console.log("item_location :", positionList);
-		console.log("icon: ", itemIcon);
-		console.log("weather_type :", weatherList);
-
 		if (name) {
 			var itemIconBlob = "";
 			if (itemIcon) {
@@ -452,7 +445,10 @@ const ItemDetails = ({ route, navigation }) => {
 									}}
 									onPress={() => {
 										setShowPopover(false);
-										navigation.push("YourCloset", { reFetchData: true });
+										if (!isError) {
+											navigation.navigate("YourCloset", { reFetchData: true });
+											// navigation.goBack();
+										}
 									}}
 								>
 									<Text>OK</Text>

@@ -6,15 +6,19 @@ import YourClosetBody from "../components/YourCloset/YourClosetBody";
 import ClosetController from "../Controllers/ClosetController";
 export default function YourCloset({ navigation, route }) {
 	const [closetData, setClosetData] = useState([]);
-	const [isDataLoading, setDataLoading] = useState(true);
-	const reLoadData = route.params ? route.params.reLoadData : false;
+	const [isDataLoading, setDataLoading] = useState(false);
+	const reLoadData = route.params ? route.params.reFetchData : false;
 	useEffect(async () => {
-		const closet_data = await ClosetController.getAllItems();
-		console.log("the closet data is: ", closet_data);
-		if (closet_data) {
-			setClosetData(closet_data);
-		}
-		setDataLoading(false);
+		setDataLoading(true);
+		const refresh = navigation.addListener("focus", () => {
+			Promise.resolve(ClosetController.getAllItems()).then((data) => {
+				if (data) {
+					setClosetData(data);
+				}
+				setDataLoading(false);
+			});
+		});
+		return refresh;
 	}, [reLoadData, navigation]);
 	const item_data_list = [
 		{

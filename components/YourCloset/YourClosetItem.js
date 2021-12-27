@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Avatar, ScrollView, StyleSheet, Image } f
 import { Icon } from "react-native-elements/dist/icons/Icon";
 import { ListItem, Button } from "react-native-elements";
 const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
-	console.log("the item icon is", item_data.icon);
 	var image_source = item_data.icon;
 	return (
 		<View style={{ marginBottom: 10, background: "blue" }}>

@@ -17,10 +17,10 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
 		setLoadingRemoveData(true);
 		Promise.resolve(ClosetController.removeItem(item_id)).then(() => {
 			setLoadingRemoveData(false);
-			setItemDataList(itemDataList.filter((item) => item.id !== item_id));
+			setItemDataList(itemDataList.filter((item, index, rep) => index !== item_id));
 		});
 	}, []);
-
+	console.log("the item data list is: ", itemDataList);
 	const updateSearch = (searchInput) => {
 		setItemSearchInput(searchInput);
 	};
