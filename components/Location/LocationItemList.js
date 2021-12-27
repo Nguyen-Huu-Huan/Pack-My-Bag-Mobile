@@ -66,16 +66,14 @@ const LocationItemList = ({ location_list, place_type, navigation }) => {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={location_list}
         search
         maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Choose your location"
+        placeholder={value ? value : "Choose your location"}
         searchPlaceholder="Location searching..."
         value={value}
         onChange={(item) => {
-          setValue(item.value);
+          setValue(item.label);
         }}
         renderLeftIcon={() => (
           <Entypo style={styles.icon} color="black" name="location" size={20} />

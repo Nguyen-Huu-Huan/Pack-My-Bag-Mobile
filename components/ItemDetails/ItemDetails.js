@@ -22,7 +22,11 @@ import { ActivityIndicator } from "react-native";
 import ClosetController from "../../Controllers/ClosetController";
 import { StackActions, NavigationActions } from "react-navigation";
 const ItemDetails = ({ route, navigation }) => {
-  const { locations } = useContext(LocationContext);
+  var { locations } = useContext(LocationContext);
+  locations = [
+    ...locations,
+    { label: "All", location_type: "Select all locations" },
+  ];
   const [positionIndex, setPositionIndex] = useState(null);
   const [weatherIndex, setWeatherIndex] = useState(null);
   const [value, setValue] = useState(null);
@@ -150,10 +154,18 @@ const ItemDetails = ({ route, navigation }) => {
     }
   };
   const handleChangePositionOption = () => {
-    if (value) {
-      if (positionList.indexOf(value) === -1) {
+    var checkError = false;
+    if (value && value !== "All") {
+      positionList.map((location) => {
+        if (location === "All") {
+          checkError = true;
+        }
+      });
+      if (positionList.indexOf(value) === -1 && checkError === false) {
         setPositionList([...positionList, value]);
       }
+    } else if (value && value === "All") {
+      setPositionList([value]);
     }
   };
   const handleDeletePositionOption = (positionName) => {
@@ -163,10 +175,18 @@ const ItemDetails = ({ route, navigation }) => {
     setPositionList(newData);
   };
   const handleChangeWeatherOption = () => {
-    if (weatherIndex) {
-      if (weatherList.indexOf(weatherIndex) === -1) {
+    var checkError = false;
+    if (weatherIndex && weatherIndex !== "All") {
+      weatherList.map((weather) => {
+        if (weather === "All") {
+          checkError = true;
+        }
+      });
+      if (weatherList.indexOf(weatherIndex) === -1 && checkError === false) {
         setWeatherList([...weatherList, weatherIndex]);
       }
+    } else if (weatherIndex && weatherIndex === "All") {
+      setWeatherList([value]);
     }
   };
   const handleDeleteWeatherOption = (weatherName) => {
@@ -190,7 +210,7 @@ const ItemDetails = ({ route, navigation }) => {
         icon: itemIconBlob || "",
         weather_type: weatherList || [""],
       };
-
+      console.log(newItem);
       var icon_uploaded = await ClosetController.createItem(newItem);
       setNewItem(newItem);
       if (icon_uploaded) {
@@ -407,6 +427,7 @@ const ItemDetails = ({ route, navigation }) => {
                     "Misty/Foggy",
                     "Thunderstorm",
                     "Snow",
+                    "All",
                   ]}
                   maxHeight={300}
                   placeholder={

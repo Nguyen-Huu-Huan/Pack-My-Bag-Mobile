@@ -15,10 +15,17 @@ const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
   return (
     <View style={{ marginBottom: 10, background: "blue" }}>
       <ListItem.Swipeable
-        onPress={() =>
-          navigation.navigate("ItemInfo", { item_data: [item_data] })
-        }
         bottomDivider
+        leftContent={
+          <Button
+            title="Details"
+            icon={{ name: "details", color: "white" }}
+            buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
+            onPress={() =>
+              navigation.navigate("ItemInfo", { item_data: [item_data] })
+            }
+          />
+        }
         rightContent={
           <Button
             title="Remove"
