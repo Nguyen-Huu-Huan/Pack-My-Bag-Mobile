@@ -9,7 +9,7 @@ const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
 			<ListItem.Swipeable
 				bottomDivider
 				leftContent={
-					<Button title="Details" icon={{ name: "details", color: "white" }} buttonStyle={{ minHeight: "100%", backgroundColor: "red" }} onPress={() => navigation.navigate("ItemInfo", { item_data: [item_data], view_info: true })} />
+					<Button title="Details" icon={{ name: "info", color: "white" }} buttonStyle={{ minHeight: "100%", backgroundColor: "#2832C2" }} onPress={() => navigation.navigate("ItemInfo", { item_data: [item_data], view_info: true })} />
 				}
 				rightContent={
 					<Button
