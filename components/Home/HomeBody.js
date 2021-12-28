@@ -18,11 +18,13 @@ import AwesomeButton from "react-native-really-awesome-button";
 import * as Location from "expo-location";
 import { Dropdown } from "react-native-element-dropdown";
 import ClosetController from "../../Controllers/ClosetController";
+import LocationController from "../../Controllers/LocationController";
+import { useIsFocused } from "@react-navigation/native";
 
 // import { HomeStyles } from "./Home-stylesheet.js";
 const HomeBody = ({ navigation }) => {
   const [choice, setChoice] = useState(null);
-  const { locations } = useContext(LocationContext);
+  // var { locations } = useContext(LocationContext);
   var { closetItems } = useContext(ClosetContext);
   const openWeatherKey = `651f17426e3a852e30a3107b8f1dd555`;
   const url = "https://api.openweathermap.org/data/2.5/weather?";
@@ -30,6 +32,8 @@ const HomeBody = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [closetData, setClosetData] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const isFocused = useIsFocused();
   const loadCurrentWeather = async () => {
     setRefreshing(true);
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -65,7 +69,14 @@ const HomeBody = ({ navigation }) => {
         setClosetData(data);
       }
     });
-  }, [choice]);
+  }, [choice, isFocused]);
+  useEffect(async () => {
+    Promise.resolve(LocationController.getAllLocations()).then((data) => {
+      if (data) {
+        setLocations(data);
+      }
+    });
+  }, [isFocused]);
   // console.log("This is closetItems Length", closetItems.length);
   // console.log("This is closetData Length", closetData.length);
   if (closetItems !== closetData) {

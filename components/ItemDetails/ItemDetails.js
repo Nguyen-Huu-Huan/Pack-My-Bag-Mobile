@@ -21,12 +21,16 @@ import Popover from "react-native-popover-view";
 import { ActivityIndicator } from "react-native";
 import ClosetController from "../../Controllers/ClosetController";
 import { StackActions, NavigationActions } from "react-navigation";
+import LocationController from "../../Controllers/LocationController";
+import { useIsFocused } from "@react-navigation/native";
 const ItemDetails = ({ route, navigation }) => {
-  var { locations } = useContext(LocationContext);
-  locations = [
-    ...locations,
-    { label: "All", location_type: "Select all locations" },
-  ];
+  // var { locations } = useContext(LocationContext);
+  // locations = [
+  //   ...locations,
+  //   { label: "All", location_type: "Select all locations" },
+  // ];
+  var [locations, setLocations] = useState([]);
+  const isFocused = useIsFocused();
   const [positionIndex, setPositionIndex] = useState(null);
   const [weatherIndex, setWeatherIndex] = useState(null);
   const [value, setValue] = useState(null);
@@ -39,6 +43,16 @@ const ItemDetails = ({ route, navigation }) => {
   const [isLoadingSubmitData, setIsLoadingSubmitData] = useState(false);
   const [newItem, setNewItem] = useState([]);
   const { item_data, available_closet_index } = route.params;
+  useEffect(async () => {
+    Promise.resolve(LocationController.getAllLocations()).then((data) => {
+      if (data) {
+        setLocations([
+          ...data,
+          { label: "All", location_type: "Select all locations" },
+        ]);
+      }
+    });
+  }, [isFocused]);
   if (item_data.length > 0 && name === null) {
     item_data.map((item) => {
       setPositionIndex(item.closet_position_index);

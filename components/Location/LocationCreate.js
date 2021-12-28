@@ -1,5 +1,5 @@
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
+import LocationIQ from "react-native-locationiq-autocomplete";
 import { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -10,11 +10,12 @@ import {
   ScrollView,
   StyleSheet,
   Button,
+  TextInput,
 } from "react-native";
 import * as Location from "expo-location";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Hideo } from "react-native-textinput-effects";
 import { Fumi } from "react-native-textinput-effects";
@@ -22,6 +23,7 @@ import Popover from "react-native-popover-view";
 import { useFonts } from "expo-font";
 import LocationController from "../../Controllers/LocationController";
 const LocationCreate = ({ navigation }) => {
+  LocationIQ.init("pk.933d6d9ba8d64a35bbcbeafda02563b6");
   const [pin, setPin] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -42,6 +44,15 @@ const LocationCreate = ({ navigation }) => {
   const { width, height } = Dimensions.get("screen");
   const headToLocation = useRef(null);
   const [currentPosition, setCurrentPosition] = useState({});
+  const [text, setText] = useState("");
+  const [isDisplayLocationDropdown, setDisplayLocationDropdown] =
+    useState(false);
+  const [region, setRegion] = useState({});
+  const [locationName, setLocationName] = useState("");
+  const [locationType, setLocationType] = useState("");
+  const [showPopover, setShowPopover] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [locationDropdownResults, setLocationDropdownResults] = useState([]);
   const getDirections = async (startLoc, desLoc) => {
     try {
       const resp = await fetch(
@@ -73,46 +84,48 @@ const LocationCreate = ({ navigation }) => {
     };
     _getLocationAsync();
   }, []);
-
-  const [region, setRegion] = useState({});
-  const [locationName, setLocationName] = useState("");
-  const [locationType, setLocationType] = useState("");
-  const [showPopover, setShowPopover] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const renderLocationImage = (item) => {
-    console.log("the item is: ", item);
-    return (
-      <Image
-        style={{
-          flex: 1,
-          width: width * 0.95,
-          alignSelf: "center",
-          height: height * 0.15,
-          position: "absolute",
-          bottom: height * 0.05,
-          zIndex: 90,
-        }}
-        source={{ uri: item.placeIcon }}
-      />
+  const searchSubmit = (search_query) => {
+    setDisplayLocationDropdown(true);
+    if (search_query !== "") {
+      LocationIQ.search(search_query)
+        .then((json) => {
+          console.log("json check: ", json);
+          setLocationDropdownResults(json);
+        })
+        .catch((error) => setLocationDropdownResults([]));
+    }
+  };
+  const goToLocation = (latitude, longitude) => {
+    headToLocation.current.animateToRegion(
+      {
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.05,
+      },
+      350
     );
   };
-
   const handleSubmitLocation = async () => {
-    if (locationName && locationType && region !== currentPosition) {
+    console.log("checkpoint (1): ", locationName, locationType);
+    console.log("checkpoint (2): ", region, currentPosition);
+    if (
+      locationName &&
+      locationType &&
+      JSON.stringify(region) !== JSON.stringify(currentPosition)
+    ) {
       setIsError(false);
-      //This is my noteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee : two values
       console.log(locationName);
       console.log(locationType);
-      newLocationData = {
+      var newLocationData = {
         label: locationName,
-        place: locationType,
+        location_type: locationType,
         latitude: region.latitude,
         longitude: region.longitude,
-        placeIcon: region.placeIcon,
       };
       LocationController.createLocation(newLocationData)
         ? navigation.push("Location", newLocationData)
-        : setIsError(true);
+        : null;
     } else {
       setIsError(true);
     }
@@ -172,7 +185,7 @@ const LocationCreate = ({ navigation }) => {
         ) : null}
       </MapView>
 
-      <GooglePlacesAutocomplete
+      {/* <GooglePlacesAutocomplete
         placeholder="Search"
         fetchDetails={true}
         minLength={3}
@@ -221,7 +234,109 @@ const LocationCreate = ({ navigation }) => {
           },
           listView: { backgroundColor: "white" },
         }}
-      />
+      /> */}
+      <View
+        style={{
+          position: "absolute",
+          flexDirection: "row",
+          width: "100%",
+          // justifyContent: "center",
+          alignItems: "center",
+          marginTop: 10,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "column",
+            width: "80%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setText(value)}
+            value={text}
+            placeholder="search here.."
+          />
+          {isDisplayLocationDropdown ? (
+            <View
+              style={{
+                height: "auto",
+                paddingVertical: 20,
+                width: "80%",
+                backgroundColor: "white",
+                borderRadius: 15,
+              }}
+            >
+              {locationDropdownResults.length > 0 ? (
+                <View
+                  style={{
+                    height: 400,
+                    width: "100%",
+                    borderRadius: 15,
+                  }}
+                >
+                  {locationDropdownResults.map((location, index) => {
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={{
+                          width: "100%",
+                          height: 40,
+                          padding: 10,
+                          borderTopWidth: 1,
+                          borderBottomWidth: 1,
+                        }}
+                        onPress={() => {
+                          var new_location_formated = {
+                            latitude: parseInt(location.lat),
+                            longitude: parseInt(location.lon),
+                            latitudeDelta: 0.1,
+                            longitudeDelta: 0.05,
+                          };
+                          setRegion(new_location_formated);
+                          goToLocation(
+                            parseInt(location.lat),
+                            parseInt(location.lon)
+                          );
+                          setText(location.address.name);
+                          setDisplayLocationDropdown(false);
+                        }}
+                      >
+                        <Text>{location.address.name}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View>
+                  <Text
+                    style={{ fontSize: 25, color: "grey", textAlign: "center" }}
+                  >
+                    No Locations found
+                  </Text>
+                </View>
+              )}
+            </View>
+          ) : null}
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {
+            searchSubmit(text);
+          }}
+          style={{
+            width: 40,
+            height: 40,
+            alignSelf: "flex-start",
+            marginTop: "4%",
+          }}
+        >
+          <EvilIcons name="search" size={30} />
+        </TouchableOpacity>
+      </View>
+
       <View
         style={{
           display: "flex",
@@ -330,7 +445,11 @@ const LocationCreate = ({ navigation }) => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onPress={() => setShowPopover(false)}
+              onPress={() => {
+                setShowPopover(false);
+
+                navigation.navigate("Location", { reFetchData: true });
+              }}
             >
               <Text>OK</Text>
             </TouchableOpacity>
@@ -357,5 +476,14 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 5,
     color: "#FF2400",
+  },
+  input: {
+    width: "80%",
+    height: 50,
+    margin: 12,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
   },
 });
