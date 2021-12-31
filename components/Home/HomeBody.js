@@ -74,10 +74,9 @@ const HomeBody = ({ navigation }) => {
 	const connectToArduino = async () => {
 		itemDataResult = [];
 		setIsSearchLoading(true);
-		console.log("This is when u click button", closetItems.length);
 		await closetItems.forEach(async (item) => {
 			try {
-				if (item.item_location.includes(choice)) {
+				if (item.item_location.includes(choice) || item.item_location[0] === "All") {
 					var weather_type = currentWeather.weather;
 					var match_weather_type = [];
 					await weather_type.forEach((type) => {
@@ -133,7 +132,7 @@ const HomeBody = ({ navigation }) => {
 					});
 					match_weather_type.forEach((type) => {
 						try {
-							if (item.weather_type.includes(type)) {
+							if (item.weather_type.includes(type) || item.weather_type[0] === "All") {
 								itemDataResult.push(item);
 							}
 						} catch (err) {
