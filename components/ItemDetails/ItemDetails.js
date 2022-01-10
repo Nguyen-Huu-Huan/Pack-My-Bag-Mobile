@@ -193,7 +193,7 @@ const ItemDetails = ({ route, navigation }) => {
 				icon: itemIconBlob || "",
 				weather_type: weatherList || [""],
 			};
-			console.log(newItem);
+			console.log("checkpoint item: ", newItem);
 			var icon_uploaded = await ClosetController.createItem(newItem);
 			setNewItem(newItem);
 			if (icon_uploaded) {

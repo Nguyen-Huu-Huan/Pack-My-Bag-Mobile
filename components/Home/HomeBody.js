@@ -133,7 +133,9 @@ const HomeBody = ({ navigation }) => {
 					match_weather_type.forEach((type) => {
 						try {
 							if (item.weather_type.includes(type) || item.weather_type[0] === "All") {
-								itemDataResult.push(item);
+								if (item.closet_position_index!== ""){
+									itemDataResult.push(item);
+								}
 							}
 						} catch (err) {
 							console.log("weather_type field is missing: ", err);
