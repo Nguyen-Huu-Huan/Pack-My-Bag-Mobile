@@ -12,7 +12,6 @@ import * as ImagePicker from "expo-image-picker";
 import Popover from "react-native-popover-view";
 import { ActivityIndicator } from "react-native";
 import ClosetController from "../../Controllers/ClosetController";
-import { StackActions, NavigationActions } from "react-navigation";
 import LocationController from "../../Controllers/LocationController";
 import { useIsFocused } from "@react-navigation/native";
 const ItemDetails = ({ route, navigation }) => {

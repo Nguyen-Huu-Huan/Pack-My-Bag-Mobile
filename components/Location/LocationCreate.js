@@ -20,7 +20,6 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Hideo } from "react-native-textinput-effects";
 import { Fumi } from "react-native-textinput-effects";
 import Popover from "react-native-popover-view";
-import { useFonts } from "expo-font";
 import LocationController from "../../Controllers/LocationController";
 const LocationCreate = ({ navigation }) => {
   LocationIQ.init("pk.933d6d9ba8d64a35bbcbeafda02563b6");
@@ -28,9 +27,7 @@ const LocationCreate = ({ navigation }) => {
     latitude: 37.78825,
     longitude: -122.4324,
   });
-  let [fontsLoaded] = useFonts({
-    font1: require("../../assets/Fonts/font1.ttf"),
-  });
+  
   // const [value, setValue] = useState(null);
   // const [items, setItems] = useState([
   //   { label: "Market", value: "1" },

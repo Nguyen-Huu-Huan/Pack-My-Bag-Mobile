@@ -1,5 +1,4 @@
 import { storage, database } from "../FirebaseSetup";
-import uuid from "uuid";
 const ClosetController = {
 	getAllItems: () => {
 		return database
