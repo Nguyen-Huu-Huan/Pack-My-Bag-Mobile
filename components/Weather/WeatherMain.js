@@ -87,7 +87,7 @@ const App = () => {
 							var dt_reformat = dt.toLocaleTimeString().replace(/:\d+ /, " ").split(":")[0] + ":" + dt.toLocaleTimeString().replace(/:\d+ /, " ").split(":")[1] 
 							return (
 								<View style={styles.hour}>
-									<Text>{dt_reformat}</Text>
+									<Text style={{fontWeight: "bold", fontSize: 18}}>{dt_reformat}</Text>
 									<Text>{Math.round(hour.item.temp)}°C</Text>
 									<Image
 										style={styles.smallIcon}

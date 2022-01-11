@@ -486,11 +486,7 @@ const ItemDetails = ({ route, navigation }) => {
 											setShowPopover(false);
 
 											if (!isError) {
-												navigation.navigate("YourCloset", { reFetchData: true });
-												// navigation.push("YourCloset");
-												// navigation.goBack();
-
-												// navigation.navigate("YourCloset");
+												navigation.navigate("Your Closet", { reFetchData: true });
 											}
 										}}
 									>

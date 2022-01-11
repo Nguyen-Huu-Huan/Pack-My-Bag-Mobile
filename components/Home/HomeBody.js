@@ -206,7 +206,7 @@ const HomeBody = ({ navigation }) => {
       >
         <TouchableOpacity
           style={styles.touchableOpacity}
-          onPress={() => navigation.navigate("YourCloset")}
+          onPress={() => navigation.navigate("Your Closet")}
         >
           {/* <Icon name="g-translate" color="#00aced" size={35} style={styles.Icon} /> */}
           <MaterialCommunityIcon

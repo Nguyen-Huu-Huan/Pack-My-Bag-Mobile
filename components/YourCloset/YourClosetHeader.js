@@ -45,21 +45,21 @@ const YourClosetHeader = ({ item_data_list }) => {
 		<Header
 			containerStyle={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}
 			leftComponent={
-				<SafeAreaProvider style={{width: 200}}>
+				<SafeAreaProvider style={{width: 200, marginLeft: 10}}>
 					<Text style={{color: "white", fontSize: 20, fontWeight: "bold"}}>Your Closet</Text>
 				</SafeAreaProvider>
 			}
 			
 			rightComponent={
-				<SafeAreaProvider style={{}}>
+				<View>
 					<Button
 						title="View Summary"
 						titleStyle={{ color: "white"}}
-						containerStyle={{ borderRadius: 20, flexDirection: "row" }}
+						containerStyle={{marginTop:-8}}
 						buttonStyle={{
 							backgroundColor: "#222160",
 							borderRadius: 20,
-							width: 155,
+							width: 160,
 							height: 45,
 						}}
 						icon={{
@@ -82,7 +82,10 @@ const YourClosetHeader = ({ item_data_list }) => {
 										</View>
 										<ListItem>
 											<View style={styles.imageWrapper}>
-												<Image style={styles.image} source={{ uri: item ? item.icon : "" }}  />
+												{item ?
+													(<Image style={styles.image} source={{ uri: item.icon }}  />):
+													(<Image style={styles.image} source="" />)
+												}
 											</View>
 											<ListItem.Content>
 												<ListItem.Title style={{ color: "black" }}>{item ? item.name : "This item has not been set up yet"}</ListItem.Title>
@@ -93,7 +96,7 @@ const YourClosetHeader = ({ item_data_list }) => {
 							})}
 						<Button title="Confirm" buttonStyle={{ backgroundColor: "green" }} onPress={() => confirmConnection()} />
 					</BottomSheet>
-				</SafeAreaProvider>
+				</View>
 			}
 		/>
 	);

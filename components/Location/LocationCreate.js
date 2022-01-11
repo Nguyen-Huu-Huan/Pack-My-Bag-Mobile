@@ -38,6 +38,7 @@ const LocationCreate = ({ navigation }) => {
   const [locationType, setLocationType] = useState("");
   const [showPopover, setShowPopover] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [yValue,setYvalue] = useState(null);
   const [locationDropdownResults, setLocationDropdownResults] = useState([]);
   const getDirections = async (startLoc, desLoc) => {
     try {
@@ -119,6 +120,7 @@ const LocationCreate = ({ navigation }) => {
     setLocationName("");
     setLocationType("");
   };
+
   return (
     <View style={{ flex: 1, position: "relative" }}>
       {/* </View> */}
@@ -275,15 +277,15 @@ const LocationCreate = ({ navigation }) => {
 
       <View
         style={{
-          display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           backgroundColor: "white",
           position: "absolute",
-          margin: 0,
+          top: Dimensions.get("window").height - 300,
+          zIndex: 90,
           width: "100%",
-          top: 750,
-          height: Dimensions.get("window").height - 750,
-          zIndex: 1,
+          height: "auto",
         }}
       >
         <View
@@ -331,7 +333,7 @@ const LocationCreate = ({ navigation }) => {
           }}
         />
 
-        <TouchableOpacity onPress={handleSubmitLocation}>
+        <TouchableOpacity onPress={handleSubmitLocation} style={{marginBottom: 60}}>
           <Text>
             <MaterialIcons
               style={styles.icon}
