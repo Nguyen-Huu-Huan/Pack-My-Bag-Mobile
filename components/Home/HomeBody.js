@@ -252,10 +252,8 @@ const HomeBody = ({ navigation }) => {
         style={{
           position: "absolute",
           justifyContent: "center",
-          alignContent: "center",
-
-          //   backgroundColor: "red",
-          top: 350,
+          alignItems: "center",
+          top: 400,
           width: "100%",
         }}
       >
@@ -263,7 +261,6 @@ const HomeBody = ({ navigation }) => {
           style={{
             fontWeight: "bold",
             fontSize: 24,
-            left: 20,
             color: "#E0115F",
           }}
         >
@@ -300,7 +297,6 @@ const HomeBody = ({ navigation }) => {
           renderItem={renderItem}
         />
         <AwesomeButton
-          style={{ left: 20 }}
           progress={isSearchLoading}
           backgroundColor="#FF8300"
           width={150}
@@ -324,6 +320,8 @@ export default HomeBody;
 const styles = StyleSheet.create({
   Title: {
     marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 20,
     fontWeight: "bold",
     fontSize: 24,
   },
@@ -347,6 +345,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 12,
     padding: 12,
+    width: "90%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

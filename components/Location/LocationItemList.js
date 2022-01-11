@@ -5,34 +5,20 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-const LocationItemList = ({ location_list, place_type, navigation }) => {
+const LocationItemList = ({ location_list, place_type, navigation, head_to_location }) => {
 	const [value, setValue] = useState(null);
-	//   const [showPopover, setShowPopover] = useState(false);
 	const [data, setData] = useState(location_list);
-	//   const [submitData, setSubmitData] = useState({
-	//     label: "",
-	//     value: "",
-	//     place: "",
-	//   });
-	//   const onSubmit = () => {
-	//     setSubmitData({ ...submitData, value: data.length.toString() });
-	//     console.log(submitData);
-	//     setData([...data, submitData]);
-	//     setSubmitData({
-	//       label: "",
-	//       value: "",
-	//       place: "",
-	//     });
-	//     setShowPopover(false);
-	//   };
+	// console.log("the data is", data);
+	
 	const renderItem = (item) => {
-		return (
+		return (	
 			<View style={styles.item}>
 				<Text style={styles.textItem}>
 					{item.label} - {item.location_type}
 				</Text>
-				{item.value === value && <AntDesign style={styles.icon} color="red" name={item.icon ? item.icon : "checkcircle"} size={20} />}
-			</View>
+				{item.label === value && <AntDesign style={styles.icon} color="red" name={"checkcircle"} size={20} />}
+			</View>		
+			
 		);
 	};
 
@@ -52,75 +38,28 @@ const LocationItemList = ({ location_list, place_type, navigation }) => {
 				selectedTextStyle={styles.selectedTextStyle}
 				inputSearchStyle={styles.inputSearchStyle}
 				iconStyle={styles.iconStyle}
-				data={location_list}
 				search
+				labelField="label"
+          		valueField="location_type"
+				data={data}
 				maxHeight={300}
 				placeholder={value ? value : "Choose your location"}
 				searchPlaceholder="Location searching..."
 				value={value}
 				onChange={(item) => {
 					setValue(item.label);
+					head_to_location({"latitude": parseFloat(item.latitude), "longitude": parseFloat(item.longitude)})
 				}}
 				renderLeftIcon={() => <Entypo style={styles.icon} color="black" name="location" size={20} />}
 				renderItem={renderItem}
 			/>
-			{/* onPress={() => setShowPopover(true)} */}
+			
 			<TouchableOpacity onPress={() => navigation.navigate("LocationCreate")}>
 				<Text>
 					<MaterialIcons style={styles.icon} color="black" name="add-location-alt" size={40} />
 				</Text>
 			</TouchableOpacity>
-			{/* <Popover
-        isVisible={showPopover}
-        onRequestClose={() => {
-          setShowPopover(false);
-          setSubmitData({
-            label: "",
-            value: "",
-            place: "",
-          });
-        }}
-      >
-        <View
-          style={{
-            margin: 40,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <SelectDropdown
-            data={place_type}
-            onSelect={(selectedItem, index) => {
-              //   let copyData = [...submitData];
-              //   copyData[2] = selectedItem;
-              //   setSubmitData(copyData);
-              setSubmitData({ ...submitData, place: selectedItem });
-              console.log(submitData);
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-          />
-          <TextInput
-            placeholder="Enter the name of choosing location"
-            onChangeText={(text) => {
-              setSubmitData({ ...submitData, label: text });
-              console.log(submitData);
-            }}
-            style={{
-              borderWidth: 2,
-              borderColor: "#00aced",
-              margin: 20,
-              width: 200,
-            }}
-          />
-          <Button title="submit" onPress={() => onSubmit()}></Button>
-        </View>
-      </Popover> */}
+			
 		</View>
 	);
 };

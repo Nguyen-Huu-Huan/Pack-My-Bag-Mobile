@@ -2,11 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { View, Image, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput } from "react-native";
 import { Icon } from "react-native-elements/dist/icons/Icon";
 import { Dropdown } from "react-native-element-dropdown";
-import Entypo from "react-native-vector-icons/Entypo";
-import Foundation from "react-native-vector-icons/Foundation";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {FontAwesome, Entypo, Foundation, AntDesign, MaterialCommunityIcons, MaterialIcons, Ionicons} from "react-native-vector-icons";
 import { LocationContext } from "../../Contexts/LocationContext";
 import * as ImagePicker from "expo-image-picker";
 import Popover from "react-native-popover-view";
@@ -14,12 +10,8 @@ import { ActivityIndicator } from "react-native";
 import ClosetController from "../../Controllers/ClosetController";
 import LocationController from "../../Controllers/LocationController";
 import { useIsFocused } from "@react-navigation/native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const ItemDetails = ({ route, navigation }) => {
-	// var { locations } = useContext(LocationContext);
-	// locations = [
-	//   ...locations,
-	//   { label: "All", location_type: "Select all locations" },
-	// ];
 	var [locations, setLocations] = useState([]);
 	const isFocused = useIsFocused();
 	const [positionIndex, setPositionIndex] = useState(null);
@@ -206,10 +198,11 @@ const ItemDetails = ({ route, navigation }) => {
 		setShowPopover(true);
 	};
 	return (
+		<SafeAreaView style={styles.container}>
 		<ScrollView style={styles.scrollView}>
 			{isLoadingSubmitData ? <ActivityIndicator size="large" color="black" /> : <></>}
 
-			<View style={styles.container}>
+			<View style={styles.viewContainer}>
 				<View style={styles.header}>
 					<Text style={styles.headerText}>Item Details</Text>
 				</View>
@@ -221,13 +214,15 @@ const ItemDetails = ({ route, navigation }) => {
 					<View style={styles.itemDetailsBody}>
 						<View style={styles.itemDetailsBodyRow}>
 							<Text style={styles.itemDetailsBodyRowText}>Item Name</Text>
-							<TextInput style={styles.itemDetailsHeaderTextInput} defaultValue={name} placeholder="Search" onChangeText={(text) => setName(text)} />
+							<View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+								<TextInput style={styles.itemDetailsHeaderTextInput} defaultValue={name} placeholder="Search" onChangeText={(text) => setName(text)} />
+							</View>
 							<Text style={styles.itemDetailsBodyRowText}>{item_data.name}</Text>
 						</View>
 						<View style={styles.itemDetailsBodyRow}>
 							<Text style={styles.itemDetailsBodyRowText}>Item Icon</Text>
-							<TouchableOpacity onPress={handleChoosePhoto}>
-								<Icon name="image" type="font-awesome" color="black" />
+							<TouchableOpacity style={{marginTop: 20, marginBottom: 20, flexDirection: "row", alignItems: "center", justifyContent: "center"}} onPress={handleChoosePhoto}>
+								<MaterialIcons name="add-a-photo" color="white" size={30}/>
 							</TouchableOpacity>
 							{itemIcon ? (
 								<View
@@ -235,9 +230,11 @@ const ItemDetails = ({ route, navigation }) => {
 										flexDirection: "row",
 										alignItems: "center",
 										justifyContent: "center",
+										borderRadius: 10,
+										height: 210
 									}}
 								>
-									<Image source={{ uri: itemIcon }} style={{ width: 200, height: 200 }} />
+									<Image source={{ uri: itemIcon }} style={{ width: 200, height: 200, borderRadius: 10 }} />
 								</View>
 							) : null}
 						</View>
@@ -265,7 +262,6 @@ const ItemDetails = ({ route, navigation }) => {
 					</View>
 					<View style={styles.itemDetailsBody}>
 						<View style={styles.itemDetailsBodyRow}>
-							<Text style={styles.itemDetailsBodyRowText}>Position</Text>
 							<View style={{ display: "flex", flexDirection: "row" }}>
 								<Dropdown
 									style={styles.dropdown}
@@ -289,14 +285,13 @@ const ItemDetails = ({ route, navigation }) => {
 									onPress={handleChangePositionOption}
 									style={{
 										width: 40,
-										height: 40,
+										height: 42,
 										marginTop: 20,
-										backgroundColor: "#222160",
 										borderRadius: 50,
 									}}
 								>
 									<Text>
-										<MaterialIcons color="white" name="add-location" size={40} />
+										<Ionicons color="white" name="add-circle-outline" size={40} />
 									</Text>
 								</TouchableOpacity>
 							</View>
@@ -334,11 +329,14 @@ const ItemDetails = ({ route, navigation }) => {
 															width: 40,
 															height: 40,
 															backgroundColor: "#222160",
+															flexDirection: "row", 
+															alignItems: "center", 
+															justifyContent: "center",
 															borderRadius: 50,
 														}}
 													>
 														<Text>
-															<FontAwesome color="white" name="remove" size={40} />
+															<FontAwesome color="white" name="remove" size={25} />
 														</Text>
 													</TouchableOpacity>
 												</View>
@@ -350,7 +348,7 @@ const ItemDetails = ({ route, navigation }) => {
 					</View>
 					<View style={styles.itemDetailsBody}>
 						<View style={styles.itemDetailsBodyRow}>
-							<Text style={styles.itemDetailsBodyRowText}>Weather</Text>
+							<Text style={styles.itemDetailsHeaderText}>Weather</Text>
 							<View style={{ display: "flex", flexDirection: "row" }}>
 								<Dropdown
 									style={styles.dropdown}
@@ -364,21 +362,21 @@ const ItemDetails = ({ route, navigation }) => {
 									onChange={(item) => {
 										setWeatherIndex(item);
 									}}
-									renderLeftIcon={() => <Entypo style={(styles.icon, { marginEnd: 10 })} color="black" name="location" size={20} />}
+									renderLeftIcon={() => <MaterialCommunityIcons style={(styles.icon, { marginEnd: 10 })} color="black" name="weather-fog" size={20} />}
 									renderItem={renderWeather}
 								/>
 								<TouchableOpacity
 									onPress={handleChangeWeatherOption}
 									style={{
 										width: 40,
-										height: 40,
+										height: 42,
 										marginTop: 20,
-										backgroundColor: "#222160",
 										borderRadius: 50,
 									}}
 								>
 									<Text>
-										<MaterialIcons color="white" name="add-location" size={40} />
+										
+										<Ionicons color="white" name="add-circle-outline" size={40} />
 									</Text>
 								</TouchableOpacity>
 							</View>
@@ -416,11 +414,14 @@ const ItemDetails = ({ route, navigation }) => {
 															width: 40,
 															height: 40,
 															backgroundColor: "#222160",
-															borderRadius: 50,
+															flexDirection: "row",
+															alignItems: "center", 
+															justifyContent: "center",
+															borderRadius: 10,
 														}}
 													>
 														<Text>
-															<FontAwesome color="white" name="remove" size={40} />
+															<FontAwesome color="white" name="remove" size={25} />
 														</Text>
 													</TouchableOpacity>
 												</View>
@@ -431,21 +432,24 @@ const ItemDetails = ({ route, navigation }) => {
 						</View>
 					</View>
 					{!isViewInfo ? (
-						<View style={{ alignItems: "center" }}>
+						<View style={{ flexDirection: "row", justifyContent: "center",  alignItems: "center", marginTop: 40 }}>
 							<TouchableOpacity
 								onPress={handleSubmitItem}
 								style={{
-									width: 40,
-									height: 40,
-
+									width: 180,
+									height: 60,
 									color: "#222160",
+									flexDirection: "row", 
+									justifyContent: "center",  
+									alignItems: "center" 
 								}}
 							>
-								<Text>
-									<Entypo size={40} name="add-to-list" color="white" />
-								</Text>
+								<View style={{height: "auto", width: 180, paddingBottom: 2, paddingTop: 2, borderRadius: 15, borderWidth: 4, borderColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+									<MaterialIcons size={40} name="post-add" color="white" />
+									<Text style={{color: "white", fontWeight: "bold", fontSize: 20}}>ADD</Text>
+								</View>
 							</TouchableOpacity>
-							<Popover isVisible={showPopover} onRequestClose={() => setShowPopover(false)}>
+							<Popover isVisible={showPopover} popoverStyle={{borderRadius: 15}} onRequestClose={() => setShowPopover(false)}>
 								<View
 									style={{
 										position: "relative",
@@ -474,7 +478,7 @@ const ItemDetails = ({ route, navigation }) => {
 											backgroundColor: "#ace5ee",
 											width: 100,
 											height: 50,
-											display: "flex",
+											flexDirection: "row",
 											alignItems: "center",
 											justifyContent: "center",
 										}}
@@ -499,6 +503,7 @@ const ItemDetails = ({ route, navigation }) => {
 				</View>
 			</View>
 		</ScrollView>
+		</SafeAreaView>
 	);
 };
 export default ItemDetails;
@@ -544,9 +549,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		fontSize: 16,
 	},
-
 	container: {
-		backgroundColor: "#4C516D",
+		minHeight: "100%"
+	},
+	viewContainer: {
 	},
 	header: {
 		flexDirection: "row",
@@ -561,13 +567,15 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: "bold",
 	},
-	scrollView: {},
+	scrollView: {
+		backgroundColor: "#4C516D"
+	},
 	itemDetails: {
 		padding: 20,
 	},
 	itemDetailsHeader: {},
 	itemDetailsHeaderText: {
-		color: "#fff",
+		color: "orange",
 		fontSize: 20,
 		fontWeight: "bold",
 	},
@@ -580,11 +588,15 @@ const styles = StyleSheet.create({
 	itemDetailsBodyRowText: {
 		color: "#fff",
 		fontSize: 16,
+		marginLeft: 20
 	},
 	itemDetailsHeaderTextInput: {
+		marginTop: 20,
 		backgroundColor: "#fff",
 		color: "black",
-		borderRadius: 7,
+		borderRadius: 12,
 		paddingHorizontal: 10,
-	},
+		height: 50,
+		width: "95%"
+	}
 });

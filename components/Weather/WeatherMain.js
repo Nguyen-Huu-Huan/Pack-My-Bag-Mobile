@@ -63,13 +63,15 @@ const App = () => {
 			>
 				<Text style={styles.title}>Current Weather</Text>
 				<View style={styles.current}>
-					<Image
-						style={styles.largeIcon}
-						source={{
-							uri: `http://openweathermap.org/img/wn/${current.icon}@4x.png`,
-						}}
-					/>
-					<Text style={styles.currentTemp}>{Math.round(forecast.current.temp)}°C</Text>
+					<View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%"}}>
+						<Image
+							style={styles.largeIcon}
+							source={{
+								uri: `http://openweathermap.org/img/wn/${current.icon}@4x.png`,
+							}}
+						/>
+						<Text style={styles.currentTemp}>{Math.round(forecast.current.temp)}°C</Text>
+					</View>
 				</View>
 
 				<Text style={styles.currentDescription}>{current.description}</Text>
@@ -82,9 +84,10 @@ const App = () => {
 						renderItem={(hour) => {
 							const weather = hour.item.weather[0];
 							var dt = new Date(hour.item.dt * 1000);
+							var dt_reformat = dt.toLocaleTimeString().replace(/:\d+ /, " ").split(":")[0] + ":" + dt.toLocaleTimeString().replace(/:\d+ /, " ").split(":")[1] 
 							return (
 								<View style={styles.hour}>
-									<Text>{dt.toLocaleTimeString().replace(/:\d+ /, " ")}</Text>
+									<Text>{dt_reformat}</Text>
 									<Text>{Math.round(hour.item.temp)}°C</Text>
 									<Image
 										style={styles.smallIcon}
@@ -99,9 +102,8 @@ const App = () => {
 					/>
 				</View>
 
-				<Text style={styles.subtitle}>Next 5 Days</Text>
-				{forecast.daily.slice(0, 5).map((d) => {
-					//Only want the next 5 days
+				<Text style={styles.subtitle}>Next 7 Days</Text>
+				{forecast.daily.slice(0, 7).map((d) => {
 					const weather = d.weather[0];
 					var dt = new Date(d.dt * 1000);
 					return (
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	current: {
+		
 		flexDirection: "row",
 		alignItems: "center",
 		alignContent: "center",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
-import { Header, BottomSheet, ListItem, Button } from "react-native-elements";
+import { Header, BottomSheet, ListItem, Button, Badge } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const YourClosetHeader = ({ item_data_list }) => {
@@ -39,8 +39,8 @@ const YourClosetHeader = ({ item_data_list }) => {
 				<SafeAreaProvider>
 					<Button
 						title="View Summary"
-						titleStyle={{ color: "white", marginRight: 15 }}
-						containerStyle={{ borderRadius: 20 }}
+						titleStyle={{ color: "white"}}
+						containerStyle={{ borderRadius: 20, flexDirection: "row" }}
 						buttonStyle={{
 							backgroundColor: "#222160",
 							borderRadius: 20,
@@ -56,31 +56,19 @@ const YourClosetHeader = ({ item_data_list }) => {
 						iconRight
 						onPress={() => setIsVisible(true)}
 					/>
-					<BottomSheet modalProps={{}} isVisible={isVisible} containerStyle={{ backgroundColor: "white" }}>
-						{/* {item_data_list.map((item_data) => (
-              <ListItem
-                key={item_data.id}
-                containerStyle={{ backgroundColor: "white " }}
-              >
-                <Image
-                  style={styles.image}
-                  source={require("../../assets/Images/favicon.png")}
-                />
-                <ListItem.Content>
-                  <ListItem.Title style={{ color: "black" }}>
-                    {item_data.name}
-                  </ListItem.Title>
-                </ListItem.Content>
-              </ListItem>
-            ))} */}
-
+					<BottomSheet modalProps={{}} isVisible={isVisible} containerStyle={{backgroundColor: "white", flexDirection: "column", justifyContent: "center" }}>
 						{data_filtered &&
 							data_filtered.map((item, index) => {
 								return (
-									<View key={index}>
-										<Text style={{ marginStart: 20, fontSize: 18 }}>This is slot {`${index + 1}`}</Text>
-										<ListItem containerStyle={{ backgroundColor: "white " }}>
-											<Image style={styles.image} source={{ uri: item ? item.icon : "" }} />
+									<View key={index} >
+										<View style={{flexDirection: "row", justifyContent: "space-between"}}>
+											<Text style={{ marginStart: 20, fontSize: 18, fontWeight: "bold" }}>Slot {`${index + 1}`}</Text>
+											{item?<Badge value="Occupied" badgeStyle={{height: 30, marginRight: 10, backgroundColor: "#222160"}} textStyle={{paddingLeft: 10, paddingRight: 10, fontWeight: "bold", fontSize: 16}}/>: null}
+										</View>
+										<ListItem>
+											<View style={styles.imageWrapper}>
+												<Image style={styles.image} source={{ uri: item ? item.icon : "" }}  />
+											</View>
 											<ListItem.Content>
 												<ListItem.Title style={{ color: "black" }}>{item ? item.name : "This item has not been set up yet"}</ListItem.Title>
 											</ListItem.Content>
@@ -97,8 +85,21 @@ const YourClosetHeader = ({ item_data_list }) => {
 };
 export default YourClosetHeader;
 const styles = StyleSheet.create({
-	image: {
+	imageWrapper: {
 		width: 50,
 		height: 50,
+		borderRadius: 10,
+		borderWidth: 1, 
+		borderStyle: "solid",
+		borderColor: "#222160",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	image: {
+		width: 48,
+		height: 48,
+		borderRadius: 10,
+		
 	},
 });

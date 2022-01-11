@@ -3,15 +3,32 @@ import { useState, useEffect, useRef } from "react";
 import { View, Text, Dimensions, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import Entypo from "react-native-vector-icons/Entypo";
-const LocationMap = ({ location_list }) => {
+const LocationMap = ({ location_list, go_to_location }) => {
 	const [pin, setPin] = useState({
 		latitude: 37.78825,
 		longitude: -122.4324,
 	});
-
 	const { width, height } = Dimensions.get("screen");
 	const headToLocation = useRef(null);
 	const [currentPosition, setCurrentPosition] = useState({});
+	const [isHeadLocation, setHeadLocation] = useState(false);
+	
+	useEffect(() => {
+		console.log("go to location detail 111", go_to_location);
+		if (Object.keys(go_to_location).length !== 0){
+			setHeadLocation(!isHeadLocation);
+			headToLocation.current.animateToRegion(
+				{
+					latitude: go_to_location.latitude,
+					longitude: go_to_location.longitude,
+					latitudeDelta: 0.1,
+					longitudeDelta: 0.05,
+				  },
+				350
+			);
+		}
+	}, [go_to_location]);
+	
 	const getDirections = async (startLoc, desLoc) => {
 		try {
 			const resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}`);
@@ -60,55 +77,6 @@ const LocationMap = ({ location_list }) => {
 	};
 	return (
 		<View style={{ flex: 1 }}>
-			{/* <GooglePlacesAutocomplete
-        placeholder="Search"
-        fetchDetails={true}
-        minLength={3}
-        listViewDisplayed={true}
-        GooglePlacesSearchQuery={{
-          rankby: "distance",
-        }}
-        onPress={(data, details = null) => {
-          headToLocation.current.animateToRegion(
-            {
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.05,
-            },
-            350
-          );
-          setRegion({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
-            placeIcon: details.icon,
-          });
-          renderLocationImage({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
-            placeIcon: details.icon,
-          });
-        }}
-        onFail={(error) => console.error(error)}
-        query={{
-          key: "AIzaSyCG4AL8db0VHirXhLZbh_ORFJXCNuxikfg",
-          language: "en",
-          // types: "(cities)",
-        }}
-        styles={{
-          container: {
-            flex: 0,
-            position: "absolute",
-            width: "100%",
-            zIndex: 1,
-          },
-          listView: { backgroundColor: "white" },
-        }}
-      /> */}
 			<MapView ref={headToLocation} style={styles.map} initialRegion={currentPosition} loadingEnabled provider="google" followUserLocation showsUserLocation>
 				{region.latitude && region.longitude ? (
 					<Marker
@@ -162,19 +130,21 @@ const LocationMap = ({ location_list }) => {
 									}}
 									onPress={() => renderLocationImage(location)}
 								>
-									<Callout tooltip style={{ width: 200, backgroundColor: "#4C516D" }}>
+									<Callout tooltip style={{ width: "auto", backgroundColor: "#4C516D" }}>
 										<View
 											style={{
 												flex: 1,
 												flexDirection: "row",
 												alignItems: "center",
 												justifyContent: "center",
+												paddingLeft: 5,
+												paddingRight: 5
 											}}
 										>
-											<TouchableOpacity>
+											<TouchableOpacity style={{paddingLeft: 5, paddingRight: 20}}>
 												<Entypo name="location-pin" size={30} color="red" />
 											</TouchableOpacity>
-											<Text style={{ color: "white" }}>{location.label}</Text>
+											<Text style={{ color: "white", paddingLeft: 5, paddingRight: 20 }}>{location.label}</Text>
 										</View>
 									</Callout>
 								</Marker>

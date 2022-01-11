@@ -27,17 +27,6 @@ const LocationCreate = ({ navigation }) => {
     latitude: 37.78825,
     longitude: -122.4324,
   });
-  
-  // const [value, setValue] = useState(null);
-  // const [items, setItems] = useState([
-  //   { label: "Market", value: "1" },
-  //   { label: "School", value: "2" },
-  //   { label: "WorkPlace", value: "3" },
-  //   { label: "Hospital", value: "4" },
-  //   { label: "Park", value: "5" },
-  //   { label: "Restaurant", value: "6" },
-  //   { label: "Library", value: "7" },
-  // ]);
   const { width, height } = Dimensions.get("screen");
   const headToLocation = useRef(null);
   const [currentPosition, setCurrentPosition] = useState({});
@@ -287,15 +276,15 @@ const LocationCreate = ({ navigation }) => {
                         }}
                         onPress={() => {
                           var new_location_formated = {
-                            latitude: parseInt(location.lat),
-                            longitude: parseInt(location.lon),
+                            latitude: parseFloat(location.lat),
+                            longitude: parseFloat(location.lon),
                             latitudeDelta: 0.1,
                             longitudeDelta: 0.05,
                           };
                           setRegion(new_location_formated);
                           goToLocation(
-                            parseInt(location.lat),
-                            parseInt(location.lon)
+                            parseFloat(location.lat),
+                            parseFloat(location.lon)
                           );
                           setText(location.address.name);
                           setDisplayLocationDropdown(false);
@@ -361,7 +350,7 @@ const LocationCreate = ({ navigation }) => {
           style={{
             width: "95%",
             marginVertical: 10,
-            backgroundColor: "#dedede",
+            backgroundColor: "#DCDCDC",
             borderRadius: 10,
           }}
           label={"Location Name"}
@@ -403,6 +392,7 @@ const LocationCreate = ({ navigation }) => {
         </TouchableOpacity>
         <Popover
           isVisible={showPopover}
+          popoverStyle={{borderRadius: 15}}
           onRequestClose={() => setShowPopover(false)}
         >
           <View
@@ -422,7 +412,7 @@ const LocationCreate = ({ navigation }) => {
             )}
 
             <Text
-              style={{ fontSize: 30, marginVertical: 10, fontFamily: "font1" }}
+              style={{ fontSize: 30, marginVertical: 10 }}
             >
               {isError ? "Error!" : "Confirm!"}
             </Text>

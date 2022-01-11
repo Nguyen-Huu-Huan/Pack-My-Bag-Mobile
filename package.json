@@ -32,6 +32,7 @@
     "react-native-popover-view": "^4.1.0",
     "react-native-really-awesome-button": "^1.6.0",
     "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "^3.10.1",
     "react-native-textinput-effects": "^0.6.2",
     "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1"

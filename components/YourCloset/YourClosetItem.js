@@ -22,7 +22,10 @@ const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
 					/>
 				}
 			>
-				<Image style={styles.image} source={{ uri: image_source }} />
+				<View style={styles.imageWrapper}>
+					<Image style={styles.image} source={{ uri: image_source }} />
+				</View>
+				
 				<ListItem.Content>
 					<ListItem.Title>{item_data.name}</ListItem.Title>
 				</ListItem.Content>
@@ -32,8 +35,21 @@ const YourClosetItem = ({ navigation, item_data, item_index, remove_item }) => {
 };
 export default YourClosetItem;
 const styles = StyleSheet.create({
-	image: {
+	imageWrapper: {
 		width: 50,
 		height: 50,
+		borderRadius: 10,
+		borderWidth: 1, 
+		borderStyle: "solid",
+		borderColor: "#222160",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	image: {
+		width: 48,
+		height: 48,
+		borderRadius: 10,
+		
 	},
 });

@@ -89,12 +89,16 @@ const YourClosetBody = ({ navigation, item_data_list }) => {
         <></>
       )}
       <View style={{ display: "flex", flexDirection: "row" }}>
-        <View style={{ width: "90%", backgroundColor: "white" }}>
+        <View style={{ width: "90%", backgroundColor: "#f5f5f5", marginBottom: 10, borderRadius: 30,  }}>
           <SearchBar
+            style={{height: "100%"}}
             placeholder="Type Here..."
             onChangeText={updateSearch}
             value={itemSearchInput}
             lightTheme
+            containerStyle={{backgroundColor: "#f5f5f5", borderRadius: 30}}
+            inputContainerStyle={{borderRadius: 30, backgroundColor: "#DCDCDC"}}
+            leftIconContainerStyle={{marginLeft: 20}}
           />
         </View>
         <View
