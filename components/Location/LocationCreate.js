@@ -171,56 +171,6 @@ const LocationCreate = ({ navigation }) => {
         ) : null}
       </MapView>
 
-      {/* <GooglePlacesAutocomplete
-        placeholder="Search"
-        fetchDetails={true}
-        minLength={3}
-        listViewDisplayed={true}
-        GooglePlacesSearchQuery={{
-          rankby: "distance",
-        }}
-        onPress={(data, details = null) => {
-          headToLocation.current.animateToRegion(
-            {
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.05,
-            },
-            350
-          );
-          setRegion({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
-            placeIcon: details.icon,
-          });
-          renderLocationImage({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
-            placeIcon: details.icon,
-          });
-        }}
-        onFail={(error) => console.error(error)}
-        query={{
-          key: "AIzaSyDzT8t3Lq9XQ5X7zRGz55OcAXr39mp1muI",
-          language: "en",
-          // types: "(cities)",
-        }}
-        styles={{
-          container: {
-            flex: 0,
-            width: "80%",
-            zIndex: 1,
-            marginTop: 10,
-            position: "absolute",
-          },
-          listView: { backgroundColor: "white" },
-        }}
-      /> */}
       <View
         style={{
           position: "absolute",
@@ -328,7 +278,6 @@ const LocationCreate = ({ navigation }) => {
           display: "flex",
           flexDirection: "column",
           backgroundColor: "white",
-          alignItems: "center",
           position: "absolute",
           margin: 0,
           width: "100%",
@@ -345,7 +294,9 @@ const LocationCreate = ({ navigation }) => {
             borderBottomWidth: 10,
             width: "20%",
           }}
-        />
+        >
+          
+        </View>
         <Fumi
           style={{
             width: "95%",

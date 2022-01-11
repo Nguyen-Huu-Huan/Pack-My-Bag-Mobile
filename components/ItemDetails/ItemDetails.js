@@ -161,7 +161,7 @@ const ItemDetails = ({ route, navigation }) => {
 				setWeatherList([...weatherList, weatherIndex]);
 			}
 		} else if (weatherIndex && weatherIndex === "All") {
-			setWeatherList([value]);
+			setWeatherList([weatherIndex]);
 		}
 	};
 	const handleDeleteWeatherOption = (weatherName) => {
@@ -357,7 +357,7 @@ const ItemDetails = ({ route, navigation }) => {
 									iconStyle={styles.iconStyle}
 									data={["Cloudy/Sunny", "Clear Sky", "Rainy", "Drizzle", "Ashy/Dusty", "Windy", "Tornado", "Misty/Foggy", "Thunderstorm", "Snow", "All"]}
 									maxHeight={300}
-									placeholder={weatherIndex ? "Apllied on " + weatherIndex + "Days" : "Choose the weather day you want to use the item"}
+									placeholder={weatherIndex ? "Apllied on " + weatherIndex + "Days" : "Weather type"}
 									value={weatherIndex}
 									onChange={(item) => {
 										setWeatherIndex(item);

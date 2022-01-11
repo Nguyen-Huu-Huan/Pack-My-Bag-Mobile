@@ -1,22 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
 import { Header, BottomSheet, ListItem, Button, Badge } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
+import ClosetController from "../../Controllers/ClosetController";
 
 const YourClosetHeader = ({ item_data_list }) => {
+	const isFocused = useIsFocused();
 	const [isVisible, setIsVisible] = useState(false);
+	const [itemDataList, setItemDataList] = useState(null)
 	const confirmConnection = () => {
 		setIsVisible(false);
 	};
+	var dataItem = itemDataList;
+	if (!dataItem) {
+		dataItem = item_data_list
+	}
+	useEffect(async () => {
+		Promise.resolve(ClosetController.getAllItems()).then((data) => {
+			if (data) {
+				setItemDataList(data)
+			}
+		});
+	}, [isFocused, isVisible]);
 	//filter all items that does not have a slot in the closet
-	item_data_list = item_data_list.filter((item) => item.closet_position_index !== null);
-	item_data_list = item_data_list.sort((firstitem, seconditem) => {
+	 dataItem = dataItem.filter((item) => item.closet_position_index !== null);
+	 dataItem = dataItem.sort((firstitem, seconditem) => {
 		return firstitem.closet_position_index - seconditem.closet_position_index;
 	});
 	const data_filtered = [];
 	for (let i = 1; i < 9; i++) {
 		var error = 0;
-		item_data_list.map((item) => {
+		dataItem.map((item) => {
 			if (item.closet_position_index === i) {
 				data_filtered.push(item);
 				error += 1;
@@ -28,15 +43,15 @@ const YourClosetHeader = ({ item_data_list }) => {
 	}
 	return (
 		<Header
-			centerComponent={{
-				text: "Your closet",
-				style: {
-					color: "#fff",
-					fontSize: 28,
-				},
-			}}
+			containerStyle={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}
+			leftComponent={
+				<SafeAreaProvider style={{width: 200}}>
+					<Text style={{color: "white", fontSize: 20, fontWeight: "bold"}}>Your Closet</Text>
+				</SafeAreaProvider>
+			}
+			
 			rightComponent={
-				<SafeAreaProvider>
+				<SafeAreaProvider style={{}}>
 					<Button
 						title="View Summary"
 						titleStyle={{ color: "white"}}
@@ -44,8 +59,8 @@ const YourClosetHeader = ({ item_data_list }) => {
 						buttonStyle={{
 							backgroundColor: "#222160",
 							borderRadius: 20,
-							width: 170,
-							height: 50,
+							width: 155,
+							height: 45,
 						}}
 						icon={{
 							name: "arrow-right",
