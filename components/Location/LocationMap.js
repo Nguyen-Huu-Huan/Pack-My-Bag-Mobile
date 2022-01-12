@@ -14,7 +14,6 @@ const LocationMap = ({ location_list, go_to_location }) => {
 	const [isHeadLocation, setHeadLocation] = useState(false);
 	
 	useEffect(() => {
-		console.log("go to location detail 111", go_to_location);
 		if (Object.keys(go_to_location).length !== 0){
 			setHeadLocation(!isHeadLocation);
 			headToLocation.current.animateToRegion(
@@ -28,6 +27,7 @@ const LocationMap = ({ location_list, go_to_location }) => {
 			);
 		}
 	}, [go_to_location]);
+
 	
 	const getDirections = async (startLoc, desLoc) => {
 		try {
@@ -58,23 +58,6 @@ const LocationMap = ({ location_list, go_to_location }) => {
 		_getLocationAsync();
 	}, []);
 	const [region, setRegion] = useState({});
-	const renderLocationImage = (item) => {
-		console.log("the item is: ", item);
-		return (
-			<Image
-				style={{
-					flex: 1,
-					width: width * 0.95,
-					alignSelf: "center",
-					height: height * 0.15,
-					position: "absolute",
-					bottom: height * 0.05,
-					zIndex: 90,
-				}}
-				source={{ uri: item.place_icon }}
-			/>
-		);
-	};
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView ref={headToLocation} style={styles.map} initialRegion={currentPosition} loadingEnabled provider="google" followUserLocation showsUserLocation>
@@ -128,9 +111,10 @@ const LocationMap = ({ location_list, go_to_location }) => {
 										latitude: location.latitude,
 										longitude: location.longitude,
 									}}
-									onPress={() => renderLocationImage(location)}
+									// onPress={() => renderLocationImage(location)}
 								>
-									<Callout tooltip style={{ width: "auto", backgroundColor: "#4C516D" }}>
+									
+									<Callout tooltip style={{ width: "auto", backgroundColor: "#4C516D", borderRadius: 10 }}>
 										<View
 											style={{
 												flex: 1,
@@ -141,16 +125,15 @@ const LocationMap = ({ location_list, go_to_location }) => {
 												paddingRight: 5
 											}}
 										>
-											<TouchableOpacity style={{paddingLeft: 5, paddingRight: 20}}>
+											<TouchableOpacity style={{paddingLeft: 5, paddingRight: 15}}>
 												<Entypo name="location-pin" size={30} color="red" />
 											</TouchableOpacity>
-											<Text style={{ color: "white", paddingLeft: 5, paddingRight: 20 }}>{location.label}</Text>
+											<Text style={{ color: "white", paddingRight: 20 }}>{location.label}</Text>
 										</View>
 									</Callout>
 								</Marker>
 							</View>
 						);
-						renderLocationImage(location);
 					})}
 				</View>
 				{currentPosition.latitude && currentPosition.longitude ? <Circle center={currentPosition} radius={500} /> : null}

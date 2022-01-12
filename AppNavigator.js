@@ -17,7 +17,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Your Closet" component={YourCloset} />
         <Stack.Screen name="Location" component={Location} />
         <Stack.Screen name="Weather" component={Weather} />
-        <Stack.Screen name="LocationCreate" component={LocationCreate} />
+        <Stack.Screen name="Location Create" component={LocationCreate} />
         <Stack.Screen name="ItemInfo" component={ItemInfo} />
       </Stack.Navigator>
     </NavigationContainer>

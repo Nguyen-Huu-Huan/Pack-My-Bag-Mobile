@@ -54,7 +54,7 @@ const LocationItemList = ({ location_list, place_type, navigation, head_to_locat
 				renderItem={renderItem}
 			/>
 			
-			<TouchableOpacity onPress={() => navigation.navigate("LocationCreate")}>
+			<TouchableOpacity onPress={() => navigation.navigate("Location Create")}>
 				<Text>
 					<MaterialIcons style={styles.icon} color="black" name="add-location-alt" size={40} />
 				</Text>

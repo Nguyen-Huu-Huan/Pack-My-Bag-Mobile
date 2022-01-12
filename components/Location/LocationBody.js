@@ -17,9 +17,6 @@ const LocationBody = ({ navigation, location_data_list }) => {
   const headToLocation = useCallback((location) => {
     setToLocation(location);
   }, []);
-
-  
-
   const place_type = [
     "Market",
     "School",
