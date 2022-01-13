@@ -270,7 +270,7 @@ const ItemDetails = ({ route, navigation }) => {
 									inputSearchStyle={styles.inputSearchStyle}
 									iconStyle={styles.iconStyle}
 									data={locations}
-									search
+									//search
 									maxHeight={300}
 									placeholder={value ? value : "Choose your locations"}
 									searchPlaceholder="Location searching..."
