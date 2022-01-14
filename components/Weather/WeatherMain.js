@@ -61,22 +61,22 @@ const App = () => {
 					/>
 				}
 			>
-				<Text style={styles.title}>Current Weather</Text>
-				<View style={styles.current}>
+				<Text style={styles.header}>Current Weather</Text>
+				<View style={styles.currentContainer}>
 					<View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%"}}>
 						<Image
-							style={styles.largeIcon}
+							style={styles.bigIcon}
 							source={{
 								uri: `http://openweathermap.org/img/wn/${current.icon}@4x.png`,
 							}}
 						/>
-						<Text style={styles.currentTemp}>{Math.round(forecast.current.temp)}°C</Text>
+						<Text style={styles.currentTemperature}>{Math.round(forecast.current.temp)}°C</Text>
 					</View>
 				</View>
 
 				<Text style={styles.currentDescription}>{current.description}</Text>
 				<View>
-					<Text style={styles.subtitle}>Hourly Forecast</Text>
+					<Text style={styles.title}>Hourly Forecast</Text>
 					<FlatList
 						horizontal
 						data={forecast.hourly.slice(0, 24)}
@@ -102,7 +102,7 @@ const App = () => {
 					/>
 				</View>
 
-				<Text style={styles.subtitle}>Next 7 Days</Text>
+				<Text style={styles.title}>Next 7 Days</Text>
 				{forecast.daily.slice(0, 7).map((d) => {
 					const weather = d.weather[0];
 					var dt = new Date(d.dt * 1000);
@@ -128,13 +128,13 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-	title: {
+	header: {
 		width: "100%",
 		textAlign: "center",
 		fontSize: 42,
 		color: "#e96e50",
 	},
-	subtitle: {
+	title: {
 		fontSize: 24,
 		marginVertical: 12,
 		marginLeft: 4,
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	current: {
+	currentContainer: {
 		
 		flexDirection: "row",
 		alignItems: "center",
 		alignContent: "center",
 	},
-	currentTemp: {
+	currentTemperature: {
 		fontSize: 32,
 		fontWeight: "bold",
 		textAlign: "center",
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		fontSize: 20,
 	},
-	largeIcon: {
+	bigIcon: {
 		width: 250,
 		height: 200,
 	},
