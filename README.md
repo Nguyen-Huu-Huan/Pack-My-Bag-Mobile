@@ -1,5 +1,5 @@
 # cosc2500-arduino
-<br />
+
 ## How to run the project
 
 1. To run the project, please run `npm install` and `npm start` in the terminal and download the Expo Go app on App Store (IOS) or Google Play (Android). 
